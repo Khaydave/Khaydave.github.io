@@ -1,182 +1,491 @@
-<!-- ABOUT -->
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olowogoke David — Creative Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ivory: #FAF7F2; --ivory-dark: #F0EAE0; --espresso: #2C1A0E;
+      --espresso-mid: #5C3D24; --espresso-light: #9C7A5C;
+      --terracotta: #C4622D; --terracotta-light: #E8956D;
+      --terracotta-pale: #F5E0D4; --sand: #E8DFD0; --white: #FFFDF9;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--ivory); color: var(--espresso); line-height: 1.7; font-size: 16px; }
+
+    /* EDIT MODE BANNER */
+    #edit-banner {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: #2C1A0E; color: #FAF7F2;
+      padding: 10px 1.5rem;
+      align-items: center; justify-content: space-between;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    #edit-banner.active { display: flex; }
+    body.editing-mode nav { top: 44px; }
+    .edit-banner-left { display: flex; align-items: center; gap: 10px; }
+    .edit-dot { width: 8px; height: 8px; background: #E8956D; border-radius: 50%; animation: blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .banner-btn {
+      padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; font-weight: 500;
+      cursor: pointer; border: none; font-family: 'Inter', sans-serif;
+    }
+    .banner-btn.save { background: var(--terracotta); color: white; }
+    .banner-btn.save:hover { background: var(--terracotta-light); }
+    .banner-btn.cancel { background: rgba(255,255,255,0.1); color: rgba(250,247,242,0.8); }
+    .banner-btn.cancel:hover { background: rgba(255,255,255,0.15); }
+
+    /* EDITABLE TEXT STYLES */
+    body.editing-mode [] {
+      outline: 1.5px dashed var(--terracotta-light);
+      border-radius: 3px;
+      cursor: text;
+      min-width: 20px;
+      min-height: 1em;
+      transition: outline 0.15s;
+    }
+    body.editing-mode []:focus {
+      outline: 2px solid var(--terracotta);
+      background: rgba(196,98,45,0.05);
+    }
+    body.editing-mode []:empty::before {
+      content: attr(data-placeholder);
+      color: var(--terracotta-light);
+      font-style: italic;
+      pointer-events: none;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,247,242,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sand);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between; height: 60px;
+      transition: top 0.2s;
+    }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); text-decoration: none; letter-spacing: 0.01em; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+    .nav-links a { text-decoration: none; font-size: 0.85rem; font-weight: 500; color: var(--espresso-mid); letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--terracotta); }
+
+    /* NAV BUTTONS */
+    .nav-cv-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--terracotta); color: white;
+      padding: 0.45rem 1rem; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 500; text-decoration: none;
+      border: none; cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cv-btn:hover { background: var(--espresso-mid); transform: translateY(-1px); }
+    .nav-cv-btn svg { width: 13px; height: 13px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .nav-edit-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: transparent; color: var(--espresso-mid);
+      padding: 0.45rem 1rem; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 500;
+      border: 1.5px solid var(--sand); cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .nav-edit-btn:hover { border-color: var(--terracotta); color: var(--terracotta); }
+    .nav-edit-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* HERO */
+    .hero { min-height: 92vh; display: flex; flex-direction: column; justify-content: center; padding: 6rem 2rem 4rem; max-width: 1100px; margin: 0 auto; position: relative; }
+    .hero-tag { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .hero-tag::before { content: ''; display: inline-block; width: 28px; height: 1.5px; background: var(--terracotta); }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 8vw, 7rem); font-weight: 600; line-height: 1.05; color: var(--espresso); margin-bottom: 0.2em; letter-spacing: -0.01em; }
+    .hero h1 em { font-style: italic; color: var(--terracotta); }
+    .hero-sub { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--espresso-light); max-width: 520px; margin-top: 1.5rem; font-weight: 300; line-height: 1.8; }
+    .hero-cta { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+    .btn-primary { background: var(--terracotta); color: white; padding: 0.75rem 1.75rem; border-radius: 100px; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: background 0.2s, transform 0.15s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary:hover { background: var(--espresso-mid); transform: translateY(-1px); }
+    .btn-primary svg { width: 14px; height: 14px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .btn-ghost { color: var(--espresso-mid); padding: 0.75rem 1.75rem; border-radius: 100px; text-decoration: none; font-size: 0.9rem; font-weight: 500; border: 1.5px solid var(--sand); transition: border-color 0.2s, color 0.2s; }
+    .btn-ghost:hover { border-color: var(--terracotta); color: var(--terracotta); }
+    .hero-scroll { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--espresso-light); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--espresso-light), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%,100%{opacity:0.4;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(0.7)} }
+
+    /* CV UPLOAD HINT */
+    #cv-upload-hint {
+      display: none;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--terracotta);
+      align-items: center;
+      gap: 8px;
+    }
+    #cv-upload-hint label {
+      display: inline-flex; align-items: center; gap: 6px;
+      cursor: pointer;
+      background: var(--terracotta-pale);
+      border: 1px dashed var(--terracotta-light);
+      padding: 6px 14px; border-radius: 100px;
+      font-weight: 500; transition: background 0.2s;
+    }
+    #cv-upload-hint label:hover { background: var(--sand); }
+    #cv-upload-hint svg { width: 13px; height: 13px; stroke: var(--terracotta); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    body.editing-mode #cv-upload-hint { display: flex; }
+
+    /* WAVE */
+    .wave-divider { width: 100%; overflow: hidden; line-height: 0; }
+    .wave-divider svg { display: block; }
+
+    /* SECTIONS */
+    section { padding: 5rem 2rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .section-label::before { content: ''; display: inline-block; width: 20px; height: 1.5px; background: var(--terracotta); }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600; color: var(--espresso); margin-bottom: 3rem; line-height: 1.2; }
+
+    /* ABOUT */
+    #about { background: var(--white); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .about-image-wrap { position: relative; }
+    .about-image-placeholder { width: 100%; aspect-ratio: 4/5; background: var(--ivory-dark); border-radius: 4px 4px 80px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--sand); position: relative; overflow: hidden; cursor: default; }
+    .about-image-placeholder::after { content: ''; position: absolute; bottom: -20px; right: -20px; width: 60%; height: 60%; border: 2px solid var(--terracotta-pale); border-radius: 4px 4px 60px 4px; z-index: -1; }
+    .about-image-placeholder img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 4px 4px 80px 4px; }
+    .about-image-text { text-align: center; font-family: 'Playfair Display', serif; font-style: italic; color: var(--espresso-light); font-size: 1rem; z-index: 1; }
+    .photo-upload-hint { display: none; font-size: 0.75rem; color: var(--terracotta); z-index: 1; }
+    .photo-upload-hint label { cursor: pointer; display: inline-flex; align-items: center; gap: 5px; background: var(--terracotta-pale); border: 1px dashed var(--terracotta-light); padding: 5px 12px; border-radius: 100px; font-weight: 500; }
+    .photo-upload-hint label:hover { background: var(--sand); }
+    body.editing-mode .photo-upload-hint { display: block; }
+    .about-body p { color: var(--espresso-mid); margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.85; }
+    .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--sand); }
+    .stat-item span:first-child { display: block; font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--terracotta); line-height: 1; }
+    .stat-item span:last-child { display: block; font-size: 0.8rem; color: var(--espresso-light); letter-spacing: 0.05em; margin-top: 4px; }
+
+    /* EXPERIENCE */
+    #experience { background: var(--ivory); }
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--sand); }
+    .timeline-item { position: relative; padding-bottom: 3rem; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot { position: absolute; left: -2rem; top: 8px; width: 9px; height: 9px; background: var(--terracotta); border-radius: 50%; transform: translateX(-4px); border: 2px solid var(--ivory); box-shadow: 0 0 0 2px var(--terracotta); }
+    .timeline-meta { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.5rem; }
+    .timeline-role { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.2rem; }
+    .timeline-company { font-size: 0.95rem; font-weight: 500; color: var(--espresso-mid); margin-bottom: 0.75rem; }
+    .timeline-desc { font-size: 0.95rem; color: var(--espresso-light); max-width: 600px; line-height: 1.8; }
+
+    /* PROJECTS */
+    #projects { background: var(--white); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .project-card { background: var(--ivory); border-radius: 16px; overflow: hidden; border: 1px solid var(--sand); transition: transform 0.25s, border-color 0.25s; }
+    .project-card:hover { transform: translateY(-4px); border-color: var(--terracotta-light); }
+    .project-thumb { width: 100%; aspect-ratio: 16/10; background: var(--ivory-dark); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--espresso-light); font-style: italic; font-family: 'Playfair Display', serif; border-bottom: 1px solid var(--sand); }
+    .project-thumb.t1 { background: #F5E0D4; color: var(--terracotta); }
+    .project-thumb.t2 { background: #E8F0E8; color: #4A7A4A; }
+    .project-thumb.t3 { background: #E0E8F0; color: #4A6A8A; }
+    .project-body { padding: 1.25rem 1.5rem 1.5rem; }
+    .project-tag { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.5rem; }
+    .project-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.5rem; }
+    .project-desc { font-size: 0.9rem; color: var(--espresso-light); line-height: 1.7; margin-bottom: 1rem; }
+    .project-link { font-size: 0.85rem; font-weight: 500; color: var(--terracotta); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: gap 0.2s; }
+    .project-link:hover { gap: 8px; }
+
+    /* SKILLS */
+    #skills { background: var(--ivory); }
+    .skills-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .skills-group-title { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--espresso-light); margin-bottom: 1.25rem; }
+    .skills-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.5rem; }
+    .skill-pill { background: var(--white); border: 1px solid var(--sand); border-radius: 100px; padding: 0.4rem 1rem; font-size: 0.875rem; color: var(--espresso-mid); font-weight: 400; transition: border-color 0.2s, color 0.2s, background 0.2s; }
+    .skill-pill:hover { border-color: var(--terracotta); color: var(--terracotta); background: var(--terracotta-pale); }
+    .skill-pill.featured { background: var(--terracotta-pale); border-color: var(--terracotta-light); color: var(--terracotta); font-weight: 500; }
+
+    /* EDUCATION */
+    #education { background: var(--white); }
+    .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .edu-card { background: var(--ivory); border-radius: 12px; padding: 1.75rem; border: 1px solid var(--sand); }
+    .edu-year { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.75rem; }
+    .edu-degree { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.3rem; }
+    .edu-school { font-size: 0.95rem; color: var(--espresso-mid); margin-bottom: 0.75rem; }
+    .edu-note { font-size: 0.875rem; color: var(--espresso-light); line-height: 1.7; }
+
+    /* CONTACT */
+    #contact { background: var(--espresso); color: var(--ivory); }
+    #contact .section-label { color: var(--terracotta-light); }
+    #contact .section-label::before { background: var(--terracotta-light); }
+    #contact .section-title { color: var(--ivory); }
+    .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .contact-intro { font-size: 1.05rem; color: rgba(250,247,242,0.65); line-height: 1.85; margin-bottom: 2rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-link-item { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: rgba(250,247,242,0.75); font-size: 0.95rem; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); transition: color 0.2s; }
+    .contact-link-item:hover { color: var(--terracotta-light); }
+    .contact-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .contact-form-wrap { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; }
+    .form-row { margin-bottom: 1.25rem; }
+    .form-row label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(250,247,242,0.5); margin-bottom: 0.5rem; }
+    .form-row input, .form-row textarea { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 0.75rem 1rem; color: var(--ivory); font-family: 'Inter', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+    .form-row input::placeholder, .form-row textarea::placeholder { color: rgba(250,247,242,0.25); }
+    .form-row input:focus, .form-row textarea:focus { border-color: var(--terracotta-light); }
+    .form-row textarea { resize: vertical; min-height: 120px; }
+    .btn-send { width: 100%; background: var(--terracotta); color: white; border: none; border-radius: 8px; padding: 0.85rem; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
+    .btn-send:hover { background: var(--terracotta-light); }
+
+    /* FOOTER */
+    footer { background: var(--espresso); border-top: 1px solid rgba(255,255,255,0.07); padding: 1.5rem 2rem; text-align: center; color: rgba(250,247,242,0.3); font-size: 0.82rem; letter-spacing: 0.04em; }
+    footer span { color: var(--terracotta-light); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 0 1rem; } .nav-links { gap: 1rem; } .nav-links a { font-size: 0.75rem; }
+      section { padding: 3.5rem 1.25rem; } .hero { padding: 4rem 1.25rem 3rem; }
+      .about-grid, .skills-layout, .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-image-wrap { max-width: 280px; } .about-stats { grid-template-columns: repeat(3,1fr); }
+      .hero h1 { font-size: clamp(2.8rem,12vw,5rem); }
+    }
+    @media (max-width: 480px) {
+      .nav-links { display: none; } .about-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body class="">
+
+  <!-- EDIT BANNER -->
+  <div id="edit-banner" class="">
+    <div class="edit-banner-left">
+      <div class="edit-dot"></div>
+      <span>Edit mode — click any text on the page to change it</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="banner-btn cancel" onclick="cancelEdit()">Cancel</button>
+      <button class="banner-btn save" onclick="saveEdits()">⇩ Save updated file</button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo" id="nav-name">Olowogoke David</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Work</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li>
+        <a id="cv-download-btn" href="#" class="nav-cv-btn" onclick="downloadCV(event)">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download CV
+        </a>
+      </li>
+      <li>
+        <button class="nav-edit-btn" onclick="toggleEdit()">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          Edit content
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <p class="hero-tag" data-editable="" data-placeholder="Your title / tagline">Creative Designer &amp; Video Editor</p>
+    <h1>Visuals that<br><em data-editable="" data-placeholder="keyword">speak</em> louder.</h1>
+    <p class="hero-sub" data-editable="" data-placeholder="Short intro sentence">A Creative Designer and Video Editor dedicated to crafting high-impact visual narratives — from cohesive brand identities to dynamic, polished video content that engages audiences and drives results.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        See my work
+      </a>
+      <a href="#contact" class="btn-ghost">Get in touch</a>
+      <a id="cv-hero-btn" href="#" class="btn-primary" style="background:var(--espresso-mid);" onclick="downloadCV(event)">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Download CV
+      </a>
+    </div>
+    <div id="cv-upload-hint">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 14 12 9 17 14"></polyline><line x1="12" y1="9" x2="12" y2="21"></line></svg>
+      <label>
+        <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--terracotta);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 14 12 9 17 14"></polyline><line x1="12" y1="9" x2="12" y2="21"></line></svg>
+        Upload your CV file (PDF)
+        <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx" style="display:none" onchange="handleCVUpload(event)">
+      </label>
+      <span id="cv-filename" style="color:var(--espresso-light);font-style:italic;">✓ CV_OLOWOGOKE DAVID.pdf ready</span>
+    </div>
+    <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
+  </section>
+
+  <div class="wave-divider"><svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="60"><path d="M0,30 C180,60 360,0 540,30 C720,60 900,0 1080,30 C1260,60 1350,15 1440,30 L1440,60 L0,60 Z" fill="#FFFDF9"></path></svg></div>
+
+  <!-- ABOUT -->
   <section id="about">
     <div class="section-inner">
-      <p class="section-label">My Story</p>
-      <h2 class="section-title">About Me</h2>
       <div class="about-grid">
         <div class="about-image-wrap">
           <div class="about-image-placeholder" id="photo-placeholder">
-            <!-- Replace 'your-photo.jpg' with your actual image file path -->
-            <img src="your-photo.jpg" alt="Olowogoke David">
+            <div class="about-image-text" id="photo-text">Your photo here</div>
+            <div class="photo-upload-hint">
+              <label>
+                <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--terracotta);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 14 12 9 17 14"></polyline><line x1="12" y1="9" x2="12" y2="21"></line></svg>
+                Upload photo
+                <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoUpload(event)">
+              </label>
+            </div>
           </div>
         </div>
         <div class="about-body">
-          <p>I am a passionate Creative Designer and Video Editor dedicated to crafting high-impact visual narratives. With a sharp eye for aesthetics and a deep understanding of digital storytelling, I bridge the gap between creative concept and compelling execution.</p>
-          <p>As the founder of Khaydave Media, I specialize in building cohesive brand identities and producing dynamic, polished video content that engages audiences and delivers measurable results. Beyond design, I also bring unique expertise to specialized projects, including Yoruba linguistic and cultural consulting, as well as digital product development.</p>
+          <p class="section-label">About me</p>
+          <h2 class="section-title" data-editable="" data-placeholder="Your about headline">Design with purpose.<br>Story through visuals.</h2>
+          <p data-editable="" data-placeholder="First paragraph about yourself">Hi, I'm David — a Creative Designer and Video Editor with a sharp eye for detail and a genuine passion for post-production. I believe great design isn't just seen, it's felt.</p>
+          <p data-editable="" data-placeholder="Second paragraph">Whether it's building a cohesive visual identity or editing dynamic video content, I deliver polished, high-end assets that engage audiences and drive real results.</p>
+          <p data-editable="" data-placeholder="Third paragraph — personal touch">I thrive at the intersection of creativity and communication — always asking how a design or a frame can say something that words alone can't.</p>
           <div class="about-stats">
-            <div class="stat-item">
-              <span>3+</span>
-              <span>Years Exp.</span>
-            </div>
-            <div class="stat-item">
-              <span>40+</span>
-              <span>Projects Done</span>
-            </div>
-            <div class="stat-item">
-              <span>2</span>
-              <span>Brands Managed</span>
-            </div>
+            <div class="stat-item"><span data-editable="" data-placeholder="0+">2+</span><span data-editable="" data-placeholder="Label">Years experience</span></div>
+            <div class="stat-item"><span data-editable="" data-placeholder="0+">40+</span><span data-editable="" data-placeholder="Label">Projects delivered</span></div>
+            <div class="stat-item"><span data-editable="" data-placeholder="0+">10+</span><span data-editable="" data-placeholder="Label">Happy clients</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- EXPERIENCE (WORK) -->
+  <div class="wave-divider" style="transform:scaleX(-1) scaleY(-1);background:#FFFDF9;"><svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="60"><path d="M0,30 C180,60 360,0 540,30 C720,60 900,0 1080,30 C1260,60 1350,15 1440,30 L1440,60 L0,60 Z" fill="#FAF7F2"></path></svg></div>
+
+  <!-- EXPERIENCE -->
   <section id="experience">
     <div class="section-inner">
-      <p class="section-label">Journey</p>
-      <h2 class="section-title">Work Experience</h2>
+      <p class="section-label">Work experience</p>
+      <h2 class="section-title" data-editable="">Where I've been.</h2>
       <div class="timeline">
-        
         <div class="timeline-item">
           <div class="timeline-dot"></div>
-          <div class="timeline-meta">2025 - Present</div>
-          <div class="timeline-role">Lead Creative Designer & Video Editor</div>
-          <div class="timeline-company">Khaydave Media</div>
-          <p class="timeline-desc"> Spearheading full visual identity developments, promotional motion graphics campaigns, and high-end video editing pipelines for corporate clients, creators, and entrepreneurial ventures.</p>
+          <p class="timeline-meta" data-editable="" data-placeholder="Year range">Sept 2025 — Present</p>
+          <p class="timeline-role" data-editable="" data-placeholder="Job title">Graphic Designer &amp; Video Editor</p>
+          <p class="timeline-company" data-editable="" data-placeholder="Company, Location">Kimpact Development Initiative (NGO)</p>
+          <p class="timeline-desc" data-editable="" data-placeholder="Describe your role and impact">Creating attractive designs and editing high-quality, engaging video content for the organisation. Involved in event planning and sound engineering, while working closely with the communications team to deliver cohesive visual messaging.</p>
         </div>
-
         <div class="timeline-item">
           <div class="timeline-dot"></div>
-          <div class="timeline-meta">2026</div>
-          <div class="timeline-role">Yoruba Linguistic Specialist</div>
-          <div class="timeline-company">Linguistic & Cultural Projects</div>
-          <p class="timeline-desc">Providing translation, localized content creation, and cultural consulting to ensure high-fidelity communication and deep audience engagement for regional media projects.</p>
+          <p class="timeline-meta" data-editable="" data-placeholder="Year range">July 2025 — Present</p>
+          <p class="timeline-role" data-editable="" data-placeholder="Job title">Video Editor</p>
+          <p class="timeline-company" data-editable="" data-placeholder="Company, Location">Bridge Inspire Foundation (NGO)</p>
+          <p class="timeline-desc" data-editable="" data-placeholder="Describe your role and impact">Editing and producing engaging video content tailored for platforms including YouTube, Instagram, and Facebook — optimizing formats and length to maximize audience engagement. Creating quality content and collaborating closely with the communications and marketing team.</p>
         </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-meta">2025 - 2026</div>
-          <div class="timeline-role">Digital Content & Product Strategist</div>
-          <div class="timeline-company">Freelance / Independent</div>
-          <p class="timeline-desc">Designed, produced, and deployed digital masterclasses and tools, including a comprehensive commercial registration course for emerging startups, managing everything from video creation to landing page architecture.</p>
-        </div>
-
       </div>
     </div>
   </section>
+
+  <div class="wave-divider"><svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="60"><path d="M0,30 C180,60 360,0 540,30 C720,60 900,0 1080,30 C1260,60 1350,15 1440,30 L1440,60 L0,60 Z" fill="#FFFDF9"></path></svg></div>
 
   <!-- PROJECTS -->
   <section id="projects">
     <div class="section-inner">
-      <p class="section-label">Portfolio</p>
-      <h2 class="section-title">Selected Projects</h2>
+      <p class="section-label">Selected projects</p>
+      <h2 class="section-title" data-editable="">Things I've made.</h2>
       <div class="projects-grid">
-
-        <!-- Project 1 -->
         <div class="project-card">
-          <div class="project-thumb t1">
-            <!-- Replace with an actual mockup image if available -->
-            <img src="voter-manual-mockup.jpg" alt="Voter Education Manual" style="width:100%; height:100%; object-fit:cover; display:none;" onload="this.style.display='block'">
-            <span>National Voter Education Manual</span>
-          </div>
+          <div class="project-thumb t1" data-editable="" data-placeholder="Project type">Brand Identity</div>
           <div class="project-body">
-            <div class="project-tag">Editorial & 3D Design</div>
-            <h3 class="project-name">National Voter Education Manual</h3>
-            <p class="project-desc">Crafted the complete structural design and striking photorealistic 3D cover presentations for a widespread civic education manual, ensuring clean readability and massive public appeal.</p>
-            <a href="#" class="project-link">View Project →</a>
+            <p class="project-tag" data-editable="" data-placeholder="Category · Type">Branding · Print</p>
+            <p class="project-name" data-editable="" data-placeholder="Project name">Amara Organic Co.</p>
+            <p class="project-desc" data-editable="" data-placeholder="Brief description of the project">Full visual identity for a Lagos-based organic food brand — logo, packaging, and brand guidelines that feel earthy, honest, and quietly premium.</p>
+            <a href="#" class="project-link" data-editable="" data-placeholder="Link text">View project →</a>
           </div>
         </div>
-
-        <!-- Project 2 -->
         <div class="project-card">
-          <div class="project-thumb t2">
-            <img src="civic-dashboard-mockup.jpg" alt="Civic Dashboard UI" style="width:100%; height:100%; object-fit:cover; display:none;" onload="this.style.display='block'">
-            <span>Naija Civic Space Dashboard</span>
-          </div>
+          <div class="project-thumb t2" data-editable="" data-placeholder="Project type">Product UI</div>
           <div class="project-body">
-            <div class="project-tag">UI Mockup & Presentation</div>
-            <h3 class="project-name">Naija Civic Space Dashboard</h3>
-            <p class="project-desc">Designed device-responsive interface mockups and interactive asset presentations showcasing complex civic data platforms cleanly across web and mobile viewports.</p>
-            <a href="#" class="project-link">View Dashboard →</a>
+            <p class="project-tag" data-editable="" data-placeholder="Category · Type">UX Design · Mobile</p>
+            <p class="project-name" data-editable="" data-placeholder="Project name">GreenRoute App</p>
+            <p class="project-desc" data-editable="" data-placeholder="Brief description of the project">UX and UI for a sustainable transport app targeting urban commuters. Reduced onboarding drop-off by 34% through simplified flows and clearer microcopy.</p>
+            <a href="#" class="project-link" data-editable="" data-placeholder="Link text">View project →</a>
           </div>
         </div>
-
-        <!-- Project 3 -->
         <div class="project-card">
-          <div class="project-thumb t3">
-            <img src="cac-course-thumbnail.jpg" alt="Course Assets" style="width:100%; height:100%; object-fit:cover; display:none;" onload="this.style.display='block'">
-            <span>CAC Registration Masterclass</span>
-          </div>
+          <div class="project-thumb t3" data-editable="" data-placeholder="Project type">Editorial Design</div>
           <div class="project-body">
-            <div class="project-tag">Video Editing & Marketing</div>
-            <h3 class="project-name">Corporate Registration Course</h3>
-            <p class="project-desc">End-to-end production of educational video modules, high-conversion promotional assets, and marketing materials designed to scale independent digital learning products.</p>
-            <a href="#" class="project-link">Watch Overview →</a>
+            <p class="project-tag" data-editable="" data-placeholder="Category · Type">Print · Editorial</p>
+            <p class="project-name" data-editable="" data-placeholder="Project name">The Woven Journal</p>
+            <p class="project-desc" data-editable="" data-placeholder="Brief description of the project">Art direction and layout design for an independent arts magazine celebrating African craft traditions. Typography and grid system designed from scratch.</p>
+            <a href="#" class="project-link" data-editable="" data-placeholder="Link text">View project →</a>
           </div>
         </div>
-
       </div>
     </div>
   </section>
+
+  <div class="wave-divider" style="transform:scaleX(-1) scaleY(-1);background:#FFFDF9;"><svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="60"><path d="M0,30 C180,60 360,0 540,30 C720,60 900,0 1080,30 C1260,60 1350,15 1440,30 L1440,60 L0,60 Z" fill="#FAF7F2"></path></svg></div>
 
   <!-- SKILLS -->
   <section id="skills">
     <div class="section-inner">
-      <p class="section-label">Expertise</p>
-      <h2 class="section-title">Skills & Tools</h2>
+      <p class="section-label">Skills</p>
+      <h2 class="section-title" data-editable="">What I bring.</h2>
       <div class="skills-layout">
-        
         <div>
-          <h3 class="skills-group-title">Creative & Video Editing</h3>
+          <p class="skills-group-title">Design &amp; editing tools</p>
           <div class="skills-list">
-            <span class="skill-pill featured">Adobe Premiere Pro</span>
-            <span class="skill-pill featured">After Effects</span>
-            <span class="skill-pill featured">Photoshop</span>
-            <span class="skill-pill">Adobe Illustrator</span>
-            <span class="skill-pill">CorelDRAW</span>
-            <span class="skill-pill">3D Render & Mockups</span>
-            <span class="skill-pill">Motion Graphics</span>
+            <span class="skill-pill featured" data-editable="">Photoshop</span>
+            <span class="skill-pill featured" data-editable="">Adobe Illustrator</span>
+            <span class="skill-pill featured" data-editable="">Premiere Pro</span>
+            <span class="skill-pill featured" data-editable="">After Effects</span>
+            <span class="skill-pill" data-editable="">Adobe InDesign</span>
+            <span class="skill-pill" data-editable="">Lightroom</span>
+            <span class="skill-pill" data-editable="">Canva</span>
+            <span class="skill-pill" data-editable="">CapCut</span>
+          </div>
+          <p class="skills-group-title">Productivity &amp; other tools</p>
+          <div class="skills-list">
+            <span class="skill-pill" data-editable="">Microsoft Office Suite</span>
+            <span class="skill-pill" data-editable="">AI Fluency</span>
           </div>
         </div>
-
         <div>
-          <h3 class="skills-group-title">Development & Specialized</h3>
+          <p class="skills-group-title">Creative disciplines</p>
           <div class="skills-list">
-            <span class="skill-pill">HTML5 & CSS3</span>
-            <span class="skill-pill">UI/UX Presentation</span>
-            <span class="skill-pill">Yoruba Linguistics</span>
-            <span class="skill-pill">Digital Product Design</span>
-            <span class="skill-pill">Data Annotation (Label Studio)</span>
+            <span class="skill-pill featured" data-editable="">Graphic Design</span>
+            <span class="skill-pill featured" data-editable="">Video Editing</span>
+            <span class="skill-pill featured" data-editable="">Visual Identity</span>
+            <span class="skill-pill" data-editable="">Motion Graphics</span>
+            <span class="skill-pill" data-editable="">Content Creation</span>
+            <span class="skill-pill" data-editable="">Social Media Design</span>
+            <span class="skill-pill" data-editable="">Post-Production</span>
+            <span class="skill-pill" data-editable="">Sound Engineering</span>
+          </div>
+          <p class="skills-group-title">Soft skills</p>
+          <div class="skills-list">
+            <span class="skill-pill" data-editable="">Team Collaboration</span>
+            <span class="skill-pill" data-editable="">Attention to Detail</span>
+            <span class="skill-pill" data-editable="">Communication</span>
+            <span class="skill-pill" data-editable="">Event Planning</span>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
+  <div class="wave-divider"><svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="60"><path d="M0,30 C180,60 360,0 540,30 C720,60 900,0 1080,30 C1260,60 1350,15 1440,30 L1440,60 L0,60 Z" fill="#FFFDF9"></path></svg></div>
+
   <!-- EDUCATION -->
   <section id="education">
     <div class="section-inner">
-      <p class="section-label">Qualifications</p>
-      <h2 class="section-title">Education & Training</h2>
+      <p class="section-label">Education</p>
+      <h2 class="section-title" data-editable="">How I got here.</h2>
       <div class="edu-grid">
-
         <div class="edu-card">
-          <div class="edu-year">Professional Development</div>
-          <h3 class="edu-degree">Advanced Digital Design & Video Editing</h3>
-          <div class="edu-school">Creative Industry Frameworks</div>
-          <p class="edu-note">Deep, rigorous focus on seamless post-production workflows, design typography architectures, and photorealistic 3D visual mockups.</p>
+          <p class="edu-year" data-editable="" data-placeholder="Year or range">Present (In View)</p>
+          <p class="edu-degree" data-editable="" data-placeholder="Degree / qualification">MBA — HR Specialization</p>
+          <p class="edu-school" data-editable="" data-placeholder="Institution name">Ahmadu Bello University, Zaria</p>
+          <p class="edu-note" data-editable="" data-placeholder="Details, honours, thesis">Masters in Business Administration with a specialization in Human Resources Management. Currently in progress.</p>
         </div>
-
         <div class="edu-card">
-          <div class="edu-year">Specialized Certifications</div>
-          <h3 class="edu-degree">Linguistic Assets & Localized Design</h3>
-          <div class="edu-school">Cultural Communications</div>
-          <p class="edu-note">Specialization in translation precision, multi-dialect typography layouts, and maximizing regional audience engagement.</p>
+          <p class="edu-year" data-editable="" data-placeholder="Year or range">2023</p>
+          <p class="edu-degree" data-editable="" data-placeholder="Degree / qualification">B.Ed. Educational Administration &amp; Planning</p>
+          <p class="edu-school" data-editable="" data-placeholder="Institution name">University of Abuja</p>
+          <p class="edu-note" data-editable="" data-placeholder="Details, honours, thesis">Bachelor of Education with a focus on Educational Administration and Planning. Graduated 2023.</p>
         </div>
-
       </div>
     </div>
   </section>
@@ -184,51 +493,159 @@
   <!-- CONTACT -->
   <section id="contact">
     <div class="section-inner">
-      <p class="section-label">Get In Touch</p>
-      <h2 class="section-title">Let's Create Something Great</h2>
       <div class="contact-layout">
-        
         <div>
-          <p class="contact-intro">Whether you have a video project waiting to be brought to life, a brand that needs a fresh identity, or a collaborative venture on digital products, my inbox is always open.</p>
+          <p class="section-label">Contact</p>
+          <h2 class="section-title" data-editable="">Let's make<br>something good.</h2>
+          <p class="contact-intro" data-editable="" data-placeholder="Short invitation to reach out">Whether you have a project in mind, want to collaborate, or just want to say hello — my inbox is always open.</p>
           <div class="contact-links">
-            <a href="mailto:your.email@example.com" class="contact-link-item">
+            <a href="mailto:ifedav.olowogoke@gmail.com" class="contact-link-item" id="email-link">
               <div class="contact-icon">✉</div>
-              <span>your.email@example.com</span>
+              <span data-editable="" data-placeholder="your@email.com">ifedav.olowogoke@gmail.com</span>
             </a>
-            <a href="https://linkedin.com/in/yourusername" target="_blank" class="contact-link-item">
+            <a href="https://linkedin.com/in/davidolowogoke" target="_blank" class="contact-link-item" id="linkedin-link">
               <div class="contact-icon">in</div>
-              <span>LinkedIn Profile</span>
+              <span data-editable="" data-placeholder="linkedin.com/in/yourname">linkedin.com/in/davidolowogoke</span>
             </a>
-            <a href="https://github.com/yourusername" target="_blank" class="contact-link-item">
-              <div class="contact-icon"> Hub </div>
-              <span>GitHub Portfolio</span>
+            <a href="https://behance.net/davidolowogoke" target="_blank" class="contact-link-item" id="behance-link">
+              <div class="contact-icon">Be</div>
+              <span data-editable="" data-placeholder="behance.net/yourname">behance.net/davidolowogoke</span>
             </a>
           </div>
         </div>
-
         <div class="contact-form-wrap">
-          <form action="#" method="POST">
-            <div class="form-row">
-              <label for="name">Name</label>
-              <input type="text" id="name" name="name" placeholder="John Doe" required>
-            </div>
-            <div class="form-row">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="john@example.com" required>
-            </div>
-            <div class="form-row">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
-            </div>
-            <button type="submit" class="btn-send">Send Message</button>
-          </form>
+          <div class="form-row"><label>Your name</label><input type="text" placeholder="e.g. Amara Okafor"></div>
+          <div class="form-row"><label>Email address</label><input type="email" placeholder="you@example.com"></div>
+          <div class="form-row"><label>Message</label><textarea placeholder="Tell me about your project…"></textarea></div>
+          <button class="btn-send">Send message</button>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
-    <p>© 2026 Olowogoke David. All rights reserved. Crafted by <span>Khaydave Media</span>.</p>
+    <p>Designed &amp; built with care · <span data-editable="">Olowogoke David</span> · 2025</p>
   </footer>
+
+  <script>
+    var cvBlob = null;
+    var cvFileName = 'CV.pdf';
+    var photoDataURL = null;
+    var editActive = false;
+    var originalContent = {};
+
+    function toggleEdit() {
+      if (!editActive) {
+        startEdit();
+      } else {
+        saveEdits();
+      }
+    }
+
+    function startEdit() {
+      editActive = true;
+      document.body.classList.add('editing-mode');
+      document.getElementById('edit-banner').classList.add('active');
+      var els = document.querySelectorAll('[data-editable]');
+      els.forEach(function(el) {
+        originalContent[el] = el.innerHTML;
+        el.contentEditable = 'true';
+        el.setAttribute('spellcheck','true');
+        el.addEventListener('keydown', preventNewlineOnEnter);
+      });
+    }
+
+    function preventNewlineOnEnter(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); }
+    }
+
+    function cancelEdit() {
+      editActive = false;
+      document.body.classList.remove('editing-mode');
+      document.getElementById('edit-banner').classList.remove('active');
+      var els = document.querySelectorAll('[data-editable]');
+      els.forEach(function(el) {
+        if (originalContent[el] !== undefined) { el.innerHTML = originalContent[el]; }
+        el.contentEditable = 'false';
+        el.removeEventListener('keydown', preventNewlineOnEnter);
+      });
+      originalContent = {};
+    }
+
+    function handleCVUpload(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      cvBlob = file;
+      cvFileName = file.name;
+      document.getElementById('cv-filename').textContent = '✓ ' + file.name + ' ready';
+    }
+
+    function handlePhotoUpload(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        photoDataURL = ev.target.result;
+        var placeholder = document.getElementById('photo-placeholder');
+        var existing = placeholder.querySelector('img');
+        if (existing) existing.remove();
+        var img = document.createElement('img');
+        img.src = photoDataURL;
+        img.alt = 'Profile photo';
+        placeholder.insertBefore(img, placeholder.firstChild);
+        document.getElementById('photo-text').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function downloadCV(e) {
+      e.preventDefault();
+      if (cvBlob) {
+        var url = URL.createObjectURL(cvBlob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = cvFileName;
+        a.click();
+        URL.revokeObjectURL(url);
+      } else {
+        alert('No CV uploaded yet.\n\nClick "Edit content" and use the "Upload your CV file" option that appears below the hero buttons.');
+      }
+    }
+
+    function saveEdits() {
+      editActive = false;
+      document.body.classList.remove('editing-mode');
+      document.getElementById('edit-banner').classList.remove('active');
+      var els = document.querySelectorAll('[data-editable]');
+      els.forEach(function(el) {
+        el.contentEditable = 'false';
+        el.removeEventListener('keydown', preventNewlineOnEnter);
+      });
+      originalContent = {};
+
+      var html = document.documentElement.outerHTML;
+
+      // Strip editing artifacts from saved file
+      html = html.replace(/\s*/g, '');
+      html = html.replace(/\s*/g, '');
+      html = html.replace(/\s*/g, '');
+      html = html.replace(/id="edit-banner"[^>]*class="[^"]*active[^"]*"/, 'id="edit-banner"');
+      html = html.replace(/class=""/, 'class=""');
+
+      // Embed uploaded photo directly if present
+      if (photoDataURL) {
+        html = html.replace(/id="photo-placeholder"[^>]*>[\s\S]*?<\/div>/m, function(m) { return m; });
+      }
+
+      var blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'portfolio.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+
+</body></html>
