@@ -1,237 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Olowogoke David — Creative Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com/">
-  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-  <link href="./index_files/css2" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --ivory: #FAF7F2; --ivory-dark: #F0EAE0; --espresso: #2C1A0E;
-      --espresso-mid: #5C3D24; --espresso-light: #9C7A5C;
-      --terracotta: #C4622D; --terracotta-light: #E8956D;
-      --terracotta-pale: #F5E0D4; --sand: #E8DFD0; --white: #FFFDF9;
-    }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; background-color: var(--ivory); color: var(--espresso); line-height: 1.7; font-size: 16px; }
-
-    /* NAV */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(250,247,242,0.92);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--sand);
-      padding: 0 2rem;
-      display: flex; align-items: center; justify-content: space-between; height: 60px;
-      transition: top 0.2s;
-    }
-    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); text-decoration: none; letter-spacing: 0.01em; }
-    .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
-    .nav-links a { text-decoration: none; font-size: 0.85rem; font-weight: 500; color: var(--espresso-mid); letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--terracotta); }
-
-    /* NAV BUTTONS */
-    .nav-cv-btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--terracotta); color: white;
-      padding: 0.45rem 1rem; border-radius: 100px;
-      font-size: 0.8rem; font-weight: 500; text-decoration: none;
-      border: none; cursor: pointer; font-family: 'Inter', sans-serif;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .nav-cv-btn:hover { background: var(--espresso-mid); transform: translateY(-1px); }
-    .nav-cv-btn svg { width: 13px; height: 13px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-    /* HERO */
-    .hero { min-height: 92vh; display: flex; flex-direction: column; justify-content: center; padding: 6rem 2rem 4rem; max-width: 1100px; margin: 0 auto; position: relative; }
-    .hero-tag { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
-    .hero-tag::before { content: ''; display: inline-block; width: 28px; height: 1.5px; background: var(--terracotta); }
-    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 8vw, 7rem); font-weight: 600; line-height: 1.05; color: var(--espresso); margin-bottom: 0.2em; letter-spacing: -0.01em; }
-    .hero h1 em { font-style: italic; color: var(--terracotta); }
-    .hero-sub { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--espresso-light); max-width: 520px; margin-top: 1.5rem; font-weight: 300; line-height: 1.8; }
-    .hero-cta { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
-    .btn-primary { background: var(--terracotta); color: white; padding: 0.75rem 1.75rem; border-radius: 100px; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: background 0.2s, transform 0.15s; display: inline-flex; align-items: center; gap: 8px; }
-    .btn-primary:hover { background: var(--espresso-mid); transform: translateY(-1px); }
-    .btn-primary svg { width: 14px; height: 14px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-    .btn-ghost { color: var(--espresso-mid); padding: 0.75rem 1.75rem; border-radius: 100px; text-decoration: none; font-size: 0.9rem; font-weight: 500; border: 1.5px solid var(--sand); transition: border-color 0.2s, color 0.2s; }
-    .btn-ghost:hover { border-color: var(--terracotta); color: var(--terracotta); }
-    .hero-scroll { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--espresso-light); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
-    .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--espresso-light), transparent); animation: scrollPulse 2s ease-in-out infinite; }
-    @keyframes scrollPulse { 0%,100%{opacity:0.4;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(0.7)} }
-
-    /* WAVE */
-    .wave-divider { width: 100%; overflow: hidden; line-height: 0; }
-    .wave-divider svg { display: block; }
-
-    /* SECTIONS */
-    section { padding: 5rem 2rem; }
-    .section-inner { max-width: 1100px; margin: 0 auto; }
-    .section-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
-    .section-label::before { content: ''; display: inline-block; width: 20px; height: 1.5px; background: var(--terracotta); }
-    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600; color: var(--espresso); margin-bottom: 3rem; line-height: 1.2; }
-
-    /* ABOUT */
-    #about { background: var(--white); }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-    .about-image-wrap { position: relative; }
-    .about-image-placeholder { width: 100%; aspect-ratio: 4/5; background: var(--ivory-dark); border-radius: 4px 4px 80px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--sand); position: relative; overflow: hidden; cursor: default; }
-    .about-image-placeholder::after { content: ''; position: absolute; bottom: -20px; right: -20px; width: 60%; height: 60%; border: 2px solid var(--terracotta-pale); border-radius: 4px 4px 60px 4px; z-index: -1; }
-    .about-image-placeholder img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 4px 4px 80px 4px; }
-    .about-image-text { text-align: center; font-family: 'Playfair Display', serif; font-style: italic; color: var(--espresso-light); font-size: 1rem; z-index: 1; }
-    .about-body p { color: var(--espresso-mid); margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.85; }
-    .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--sand); }
-    .stat-item span:first-child { display: block; font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--terracotta); line-height: 1; }
-    .stat-item span:last-child { display: block; font-size: 0.8rem; color: var(--espresso-light); letter-spacing: 0.05em; margin-top: 4px; }
-
-    /* EXPERIENCE */
-    #experience { background: var(--ivory); }
-    .timeline { position: relative; padding-left: 2rem; }
-    .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--sand); }
-    .timeline-item { position: relative; padding-bottom: 3rem; }
-    .timeline-item:last-child { padding-bottom: 0; }
-    .timeline-dot { position: absolute; left: -2rem; top: 8px; width: 9px; height: 9px; background: var(--terracotta); border-radius: 50%; transform: translateX(-4px); border: 2px solid var(--ivory); box-shadow: 0 0 0 2px var(--terracotta); }
-    .timeline-meta { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.5rem; }
-    .timeline-role { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.2rem; }
-    .timeline-company { font-size: 0.95rem; font-weight: 500; color: var(--espresso-mid); margin-bottom: 0.75rem; }
-    .timeline-desc { font-size: 0.95rem; color: var(--espresso-light); max-width: 600px; line-height: 1.8; }
-
-    /* PROJECTS */
-    #projects { background: var(--white); }
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-    .project-card { background: var(--ivory); border-radius: 16px; overflow: hidden; border: 1px solid var(--sand); transition: transform 0.25s, border-color 0.25s; }
-    .project-card:hover { transform: translateY(-4px); border-color: var(--terracotta-light); }
-    .project-thumb { width: 100%; aspect-ratio: 16/10; background: var(--ivory-dark); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--espresso-light); font-style: italic; font-family: 'Playfair Display', serif; border-bottom: 1px solid var(--sand); }
-    .project-thumb.t1 { background: #F5E0D4; color: var(--terracotta); }
-    .project-thumb.t2 { background: #E8F0E8; color: #4A7A4A; }
-    .project-thumb.t3 { background: #E0E8F0; color: #4A6A8A; }
-    .project-body { padding: 1.25rem 1.5rem 1.5rem; }
-    .project-tag { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.5rem; }
-    .project-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.5rem; }
-    .project-desc { font-size: 0.9rem; color: var(--espresso-light); line-height: 1.7; margin-bottom: 1rem; }
-    .project-link { font-size: 0.85rem; font-weight: 500; color: var(--terracotta); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: gap 0.2s; }
-    .project-link:hover { gap: 8px; }
-
-    /* SKILLS */
-    #skills { background: var(--ivory); }
-    .skills-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
-    .skills-group-title { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--espresso-light); margin-bottom: 1.25rem; }
-    .skills-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.5rem; }
-    .skill-pill { background: var(--white); border: 1px solid var(--sand); border-radius: 100px; padding: 0.4rem 1rem; font-size: 0.875rem; color: var(--espresso-mid); font-weight: 400; transition: border-color 0.2s, color 0.2s, background 0.2s; }
-    .skill-pill:hover { border-color: var(--terracotta); color: var(--terracotta); background: var(--terracotta-pale); }
-    .skill-pill.featured { background: var(--terracotta-pale); border-color: var(--terracotta-light); color: var(--terracotta); font-weight: 500; }
-
-    /* EDUCATION */
-    #education { background: var(--white); }
-    .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    .edu-card { background: var(--ivory); border-radius: 12px; padding: 1.75rem; border: 1px solid var(--sand); }
-    .edu-year { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.75rem; }
-    .edu-degree { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.3rem; }
-    .edu-school { font-size: 0.95rem; color: var(--espresso-mid); margin-bottom: 0.75rem; }
-    .edu-note { font-size: 0.875rem; color: var(--espresso-light); line-height: 1.7; }
-
-    /* CONTACT */
-    #contact { background: var(--espresso); color: var(--ivory); }
-    #contact .section-label { color: var(--terracotta-light); }
-    #contact .section-label::before { background: var(--terracotta-light); }
-    #contact .section-title { color: var(--ivory); }
-    .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
-    .contact-intro { font-size: 1.05rem; color: rgba(250,247,242,0.65); line-height: 1.85; margin-bottom: 2rem; }
-    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
-    .contact-link-item { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: rgba(250,247,242,0.75); font-size: 0.95rem; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); transition: color 0.2s; }
-    .contact-link-item:hover { color: var(--terracotta-light); }
-    .contact-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-    .contact-form-wrap { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; }
-    .form-row { margin-bottom: 1.25rem; }
-    .form-row label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(250,247,242,0.5); margin-bottom: 0.5rem; }
-    .form-row input, .form-row textarea { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 0.75rem 1rem; color: var(--ivory); font-family: 'Inter', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
-    .form-row input::placeholder, .form-row textarea::placeholder { color: rgba(250,247,242,0.25); }
-    .form-row input:focus, .form-row textarea:focus { border-color: var(--terracotta-light); }
-    .form-row textarea { resize: vertical; min-height: 120px; }
-    .btn-send { width: 100%; background: var(--terracotta); color: white; border: none; border-radius: 8px; padding: 0.85rem; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
-    .btn-send:hover { background: var(--terracotta-light); }
-
-    /* FOOTER */
-    footer { background: var(--espresso); border-top: 1px solid rgba(255,255,255,0.07); padding: 1.5rem 2rem; text-align: center; color: rgba(250,247,242,0.3); font-size: 0.82rem; letter-spacing: 0.04em; }
-    footer span { color: var(--terracotta-light); }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      nav { padding: 0 1rem; } .nav-links { gap: 1rem; } .nav-links a { font-size: 0.75rem; }
-      section { padding: 3.5rem 1.25rem; } .hero { padding: 4rem 1.25rem 3rem; }
-      .about-grid, .skills-layout, .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
-      .about-image-wrap { max-width: 280px; } .about-stats { grid-template-columns: repeat(3,1fr); }
-      .hero h1 { font-size: clamp(2.8rem,12vw,5rem); }
-    }
-    @media (max-width: 480px) {
-      .nav-links { display: none; } .about-stats { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
-</head>
-<body>
-
-  <nav>
-    <a href="#home" class="nav-logo" id="nav-name">Olowogoke David</a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#experience">Work</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li>
-        <a id="cv-download-btn" href="#" class="nav-cv-btn">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          Download CV
-        </a>
-      </li>
-    </ul>
-  </nav>
-
-  <section class="hero" id="home">
-    <p class="hero-tag">Creative Designer &amp; Video Editor</p>
-    <h1>Visuals that<br><em>speak</em> louder.</h1>
-    <p class="hero-sub">A Creative Designer and Video Editor dedicated to crafting high-impact visual narratives — from cohesive brand identities to dynamic, polished video content that engages audiences and drives results.</p>
-    <div class="hero-cta">
-      <a href="#projects" class="btn-primary">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-        See my work
-      </a>
-      <a href="#contact" class="btn-ghost">Get in touch</a>
-      <a id="cv-hero-btn" href="#" class="btn-primary" style="background:var(--espresso-mid);">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-        Download CV
-      </a>
-    </div>
-    <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
-  </section>
-
-  <div class="wave-divider"><svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="60"><path d="M0,30 C180,60 360,0 540,30 C720,60 900,0 1080,30 C1260,60 1350,15 1440,30 L1440,60 L0,60 Z" fill="#FFFDF9"></path></svg></div>
-
+<!-- ABOUT -->
   <section id="about">
     <div class="section-inner">
+      <p class="section-label">My Story</p>
+      <h2 class="section-title">About Me</h2>
       <div class="about-grid">
         <div class="about-image-wrap">
           <div class="about-image-placeholder" id="photo-placeholder">
-            <div class="about-image-text">Olowogoke David</div>
+            <!-- Replace 'your-photo.jpg' with your actual image file path -->
+            <img src="your-photo.jpg" alt="Olowogoke David">
           </div>
         </div>
         <div class="about-body">
-          <p>Your description goes here...</p>
+          <p>I am a passionate Creative Designer and Video Editor dedicated to crafting high-impact visual narratives. With a sharp eye for aesthetics and a deep understanding of digital storytelling, I bridge the gap between creative concept and compelling execution.</p>
+          <p>As the founder of Khaydave Media, I specialize in building cohesive brand identities and producing dynamic, polished video content that engages audiences and delivers measurable results. Beyond design, I also bring unique expertise to specialized projects, including Yoruba linguistic and cultural consulting, as well as digital product development.</p>
           <div class="about-stats">
             <div class="stat-item">
-              <span>5+</span>
+              <span>3+</span>
               <span>Years Exp.</span>
             </div>
             <div class="stat-item">
-              <span>50+</span>
-              <span>Projects</span>
+              <span>40+</span>
+              <span>Projects Done</span>
             </div>
             <div class="stat-item">
-              <span>100%</span>
-              <span>Happy Clients</span>
+              <span>2</span>
+              <span>Brands Managed</span>
             </div>
           </div>
         </div>
@@ -239,5 +32,203 @@
     </div>
   </section>
 
-</body>
-</html>
+  <!-- EXPERIENCE (WORK) -->
+  <section id="experience">
+    <div class="section-inner">
+      <p class="section-label">Journey</p>
+      <h2 class="section-title">Work Experience</h2>
+      <div class="timeline">
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-meta">2025 - Present</div>
+          <div class="timeline-role">Lead Creative Designer & Video Editor</div>
+          <div class="timeline-company">Khaydave Media</div>
+          <p class="timeline-desc"> Spearheading full visual identity developments, promotional motion graphics campaigns, and high-end video editing pipelines for corporate clients, creators, and entrepreneurial ventures.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-meta">2026</div>
+          <div class="timeline-role">Yoruba Linguistic Specialist</div>
+          <div class="timeline-company">Linguistic & Cultural Projects</div>
+          <p class="timeline-desc">Providing translation, localized content creation, and cultural consulting to ensure high-fidelity communication and deep audience engagement for regional media projects.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-meta">2025 - 2026</div>
+          <div class="timeline-role">Digital Content & Product Strategist</div>
+          <div class="timeline-company">Freelance / Independent</div>
+          <p class="timeline-desc">Designed, produced, and deployed digital masterclasses and tools, including a comprehensive commercial registration course for emerging startups, managing everything from video creation to landing page architecture.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-inner">
+      <p class="section-label">Portfolio</p>
+      <h2 class="section-title">Selected Projects</h2>
+      <div class="projects-grid">
+
+        <!-- Project 1 -->
+        <div class="project-card">
+          <div class="project-thumb t1">
+            <!-- Replace with an actual mockup image if available -->
+            <img src="voter-manual-mockup.jpg" alt="Voter Education Manual" style="width:100%; height:100%; object-fit:cover; display:none;" onload="this.style.display='block'">
+            <span>National Voter Education Manual</span>
+          </div>
+          <div class="project-body">
+            <div class="project-tag">Editorial & 3D Design</div>
+            <h3 class="project-name">National Voter Education Manual</h3>
+            <p class="project-desc">Crafted the complete structural design and striking photorealistic 3D cover presentations for a widespread civic education manual, ensuring clean readability and massive public appeal.</p>
+            <a href="#" class="project-link">View Project →</a>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card">
+          <div class="project-thumb t2">
+            <img src="civic-dashboard-mockup.jpg" alt="Civic Dashboard UI" style="width:100%; height:100%; object-fit:cover; display:none;" onload="this.style.display='block'">
+            <span>Naija Civic Space Dashboard</span>
+          </div>
+          <div class="project-body">
+            <div class="project-tag">UI Mockup & Presentation</div>
+            <h3 class="project-name">Naija Civic Space Dashboard</h3>
+            <p class="project-desc">Designed device-responsive interface mockups and interactive asset presentations showcasing complex civic data platforms cleanly across web and mobile viewports.</p>
+            <a href="#" class="project-link">View Dashboard →</a>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card">
+          <div class="project-thumb t3">
+            <img src="cac-course-thumbnail.jpg" alt="Course Assets" style="width:100%; height:100%; object-fit:cover; display:none;" onload="this.style.display='block'">
+            <span>CAC Registration Masterclass</span>
+          </div>
+          <div class="project-body">
+            <div class="project-tag">Video Editing & Marketing</div>
+            <h3 class="project-name">Corporate Registration Course</h3>
+            <p class="project-desc">End-to-end production of educational video modules, high-conversion promotional assets, and marketing materials designed to scale independent digital learning products.</p>
+            <a href="#" class="project-link">Watch Overview →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-inner">
+      <p class="section-label">Expertise</p>
+      <h2 class="section-title">Skills & Tools</h2>
+      <div class="skills-layout">
+        
+        <div>
+          <h3 class="skills-group-title">Creative & Video Editing</h3>
+          <div class="skills-list">
+            <span class="skill-pill featured">Adobe Premiere Pro</span>
+            <span class="skill-pill featured">After Effects</span>
+            <span class="skill-pill featured">Photoshop</span>
+            <span class="skill-pill">Adobe Illustrator</span>
+            <span class="skill-pill">CorelDRAW</span>
+            <span class="skill-pill">3D Render & Mockups</span>
+            <span class="skill-pill">Motion Graphics</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="skills-group-title">Development & Specialized</h3>
+          <div class="skills-list">
+            <span class="skill-pill">HTML5 & CSS3</span>
+            <span class="skill-pill">UI/UX Presentation</span>
+            <span class="skill-pill">Yoruba Linguistics</span>
+            <span class="skill-pill">Digital Product Design</span>
+            <span class="skill-pill">Data Annotation (Label Studio)</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-inner">
+      <p class="section-label">Qualifications</p>
+      <h2 class="section-title">Education & Training</h2>
+      <div class="edu-grid">
+
+        <div class="edu-card">
+          <div class="edu-year">Professional Development</div>
+          <h3 class="edu-degree">Advanced Digital Design & Video Editing</h3>
+          <div class="edu-school">Creative Industry Frameworks</div>
+          <p class="edu-note">Deep, rigorous focus on seamless post-production workflows, design typography architectures, and photorealistic 3D visual mockups.</p>
+        </div>
+
+        <div class="edu-card">
+          <div class="edu-year">Specialized Certifications</div>
+          <h3 class="edu-degree">Linguistic Assets & Localized Design</h3>
+          <div class="edu-school">Cultural Communications</div>
+          <p class="edu-note">Specialization in translation precision, multi-dialect typography layouts, and maximizing regional audience engagement.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label">Get In Touch</p>
+      <h2 class="section-title">Let's Create Something Great</h2>
+      <div class="contact-layout">
+        
+        <div>
+          <p class="contact-intro">Whether you have a video project waiting to be brought to life, a brand that needs a fresh identity, or a collaborative venture on digital products, my inbox is always open.</p>
+          <div class="contact-links">
+            <a href="mailto:your.email@example.com" class="contact-link-item">
+              <div class="contact-icon">✉</div>
+              <span>your.email@example.com</span>
+            </a>
+            <a href="https://linkedin.com/in/yourusername" target="_blank" class="contact-link-item">
+              <div class="contact-icon">in</div>
+              <span>LinkedIn Profile</span>
+            </a>
+            <a href="https://github.com/yourusername" target="_blank" class="contact-link-item">
+              <div class="contact-icon"> Hub </div>
+              <span>GitHub Portfolio</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-form-wrap">
+          <form action="#" method="POST">
+            <div class="form-row">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="John Doe" required>
+            </div>
+            <div class="form-row">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="john@example.com" required>
+            </div>
+            <div class="form-row">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
+            </div>
+            <button type="submit" class="btn-send">Send Message</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Olowogoke David. All rights reserved. Crafted by <span>Khaydave Media</span>.</p>
+  </footer>
