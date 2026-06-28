@@ -227,8 +227,8 @@
           <p>I thrive at the intersection of creativity and communication — always asking how a design or a frame can say something that words alone can't.</p>
           <div class="about-stats">
             <div class="stat-item"><span>2+</span><span>Years experience</span></div>
-            <div class="stat-item"><span>40+</span><span>Projects delivered</span></div>
-            <div class="stat-item"><span>10+</span><span>Happy clients</span></div>
+            <div class="stat-item"><span>100+</span><span>Projects delivered</span></div>
+            <div class="stat-item"><span>30+</span><span>Happy clients</span></div>
           </div>
         </div>
       </div>
@@ -295,7 +295,7 @@
             <p class="project-tag">Photography · Portrait</p>
             <p class="project-name">Single Shots</p>
             <p class="project-desc">A compelling portrait photography compilation — individual frames that capture personality, mood, and the quiet power of a single shot.</p>
-            <a href="https://www.behance.net/gallery/215344857/SINGLE-SHOTS/modules/1225794383" target="_blank" class="project-link">View on Behance →</a>
+            <a href="https://www.behance.net/gallery/215344857/SINGLE-SHOTS" target="_blank" class="project-link">View on Behance →</a>
           </div>
         </div>
         <div class="project-card">
@@ -439,10 +439,10 @@
           </div>
         </div>
         <div class="contact-form-wrap">
-          <div class="form-row"><label>Your name</label><input type="text" placeholder="e.g. Amara Okafor"></div>
-          <div class="form-row"><label>Email address</label><input type="email" placeholder="you@example.com"></div>
-          <div class="form-row"><label>Message</label><textarea placeholder="Tell me about your project…"></textarea></div>
-          <button class="btn-send">Send message</button>
+          <div class="form-row"><label>Your name</label><input type="text" id="contact-name" placeholder="e.g. Amara Okafor"></div>
+          <div class="form-row"><label>Email address</label><input type="email" id="contact-email" placeholder="you@example.com"></div>
+          <div class="form-row"><label>Message</label><textarea id="contact-message" placeholder="Tell me about your project…"></textarea></div>
+          <button class="btn-send" onclick="sendEmail()">Send message</button>
         </div>
       </div>
     </div>
@@ -469,6 +469,14 @@
       a.download = 'CV_Olowogoke_David.pdf';
       a.click();
       URL.revokeObjectURL(url);
+    }
+    function sendEmail() {
+      var name = document.getElementById('contact-name').value.trim();
+      var email = document.getElementById('contact-email').value.trim();
+      var message = document.getElementById('contact-message').value.trim();
+      var subject = encodeURIComponent('Portfolio Enquiry' + (name ? ' from ' + name : ''));
+      var body = encodeURIComponent((name ? 'Name: ' + name + '\n' : '') + (email ? 'Email: ' + email + '\n' : '') + '\nMessage:\n' + message);
+      window.location.href = 'mailto:ifedav.olowogoke@gmail.com?subject=' + subject + '&body=' + body;
     }
   </script>
 
